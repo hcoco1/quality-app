@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
-# Standard library imports
-from random import randint, choice as rc
-
-# Remote library imports
 from faker import Faker
+from models import User
+from config import db, app, bcrypt
 
-# Local imports
-from app import app
-from models import db
+faker = Faker()
 
-if __name__ == '__main__':
-    fake = Faker()
-    with app.app_context():
-        print("Starting seed...")
-        # Seed code goes here!
+with app.app_context():
+
+    User.query.delete()
+
+    for _ in range(20):
+        username = faker.profile(fields=["username"])["username"]
+        user = User(
+            username=username
+        )
+        
+        user.password_hash = username # We are calling the password_hash setter method here
+        db.session.add(user)
+        db.session.commit()
