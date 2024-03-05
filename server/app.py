@@ -14,11 +14,11 @@ def root():
 	return "<h1>Hello from root!</h1>"
 
 # RESTful route syntax
-class Users(Resource):
+class User(Resource):
 	def get(self):
 		users = [user.to_dict() for user in User.query.all()] # Serialize your users - the password hashes should not be sent to the client
 		return users, 200
-api.add_resource(Users, '/users')
+api.add_resource(User, '/users')
 
 if __name__ == '__main__':
     app.run(port=4000, debug=True)
